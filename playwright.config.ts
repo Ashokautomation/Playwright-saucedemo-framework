@@ -1,10 +1,10 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
-  fullyParallel: false,
+  fullyParallel: true, // Changed to true so your multi-browser tests run at the same time
   retries: 0,
-  workers: 1,
+  workers: undefined,  // Removed the '1' limit so Playwright can use your full system speed
   reporter: 'html',
   use: {
     baseURL: 'https://www.saucedemo.com',
@@ -15,13 +15,19 @@ export default defineConfig({
     {
       name: 'Google Chrome',
       use: { 
-        channel: 'chrome' // Uses the stable Google Chrome already on your PC
+        channel: 'chrome' 
       },
     },
     {
       name: 'firefox',
       use: { 
-        browserName: 'firefox' // Uses Playwright's clean Firefox engine safely
+        browserName: 'firefox' 
+      },
+    },
+    {
+      name: 'webkit', // Added Safari/WebKit testing safely
+      use: { 
+        ...devices['Desktop Safari'] 
       },
     },
   ],
