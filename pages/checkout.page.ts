@@ -7,7 +7,7 @@ export class CheckoutPage {
   private readonly postalCodeInput: Locator;
   private readonly continueButton: Locator;
   private readonly finishButton: Locator;
-  private readonly successHeader: Locator;
+  private readonly completeHeader: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -16,21 +16,23 @@ export class CheckoutPage {
     this.postalCodeInput = page.locator('[data-test="postalCode"]');
     this.continueButton = page.locator('[data-test="continue"]');
     this.finishButton = page.locator('[data-test="finish"]');
-    this.successHeader = page.locator('.complete-header');
+    this.completeHeader = page.locator('.complete-header'); // Matches SauceDemo's success text class
   }
 
-  async fillInformation(first: string, last: string, zip: string): Promise<void> {
-    await this.firstNameInput.fill(first);
-    await this.lastNameInput.fill(last);
-    await this.postalCodeInput.fill(zip);
+  async fillInformation(firstName: string, lastName: string, postalCode: string): Promise<void> {
+    await this.firstNameInput.fill(firstName);
+    await this.lastNameInput.fill(lastName);
+    await this.postalCodeInput.fill(postalCode);
     await this.continueButton.click();
   }
 
+  // Named exactly to match your purchase.spec.ts workflow step
   async completePayment(): Promise<void> {
     await this.finishButton.click();
   }
 
-  async getSuccessText(): Promise<string> {
-    return await this.successHeader.textContent() ?? '';
+  // Named exactly to match your purchase.spec.ts assertion step
+  async getSuccessText(): Promise<string | null> {
+    return await this.completeHeader.textContent();
   }
 }
