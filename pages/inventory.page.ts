@@ -37,6 +37,8 @@ export class InventoryPage {
 
   async logout(): Promise<void> {
     await this.menuButton.click();
-    await this.logoutLink.click();
+    // Forces Playwright to wait for the sidebar animation to finish
+  await this.logoutLink.waitFor({ state: 'visible' }); 
+  await this.logoutLink.click();
   }
 }
